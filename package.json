@@ -1,0 +1,16 @@
+{
+  "name": "law1x-website",
+  "version": "1.0.0",
+  "description": "LAW1X Esports Portfolio with MongoDB Admin",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}

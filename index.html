@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAW1X | Esports Operations Leader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --accent: #ff3e3e;
+            --accent-hover: #ff5252;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border: #2a2a2a;
+            --success: #00d084;
+            --warning: #ffa502;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            border-bottom-color: var(--border);
+            padding: 1rem 3rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-img {
+            transform: scale(1.1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .admin-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .admin-trigger:hover {
+            opacity: 1;
+            background: white;
+            border-color: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transform: scale(1.2);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 62, 62, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 62, 62, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-text {
+            z-index: 1;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 20px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 span {
+            color: var(--text-muted);
+            display: block;
+            font-size: 0.5em;
+            font-weight: 300;
+            margin-top: 0.5rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border-radius: 4px;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 62, 62, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-muted);
+        }
+
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .profile-ring {
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        .profile-ring::before,
+        .profile-ring::after {
+            content: '';
+            position: absolute;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            inset: 20px;
+        }
+
+        .profile-ring::after {
+            inset: 40px;
+            border-color: var(--accent);
+            opacity: 0.3;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--bg-secondary);
+            box-shadow: 0 0 60px rgba(255, 62, 62, 0.2);
+            position: relative;
+            z-index: 1;
+            filter: grayscale(20%) contrast(1.1);
+            transition: all 0.5s ease;
+        }
+
+        .profile-container:hover .profile-img {
+            filter: grayscale(0%) contrast(1);
+            transform: scale(1.02);
+        }
+
+        .status-badge {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        section {
+            padding: 6rem 10%;
+            position: relative;
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: block;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            max-width: 600px;
+            font-size: 1.1rem;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .profile-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--text-muted);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .profile-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .experience {
+            background: var(--bg-secondary);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            padding-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.6s forwards;
+            cursor: pointer;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+        .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -5px;
+            top: 0;
+            width: 11px;
+            height: 11px;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            background: var(--accent);
+            transform: scale(1.3);
+            box-shadow: 0 0 20px rgba(255, 62, 62, 0.5);
+        }
+
+        .timeline-content {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-content {
+            border-color: var(--accent);
+            transform: translateX(10px);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .timeline-role {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+        }
+
+        .timeline-desc {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .timeline-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-secondary);
+        }
+
+        .competencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .competency-category {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .competency-category:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .competency-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .competency-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .competency-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .skill-list li:last-child {
+            border-bottom: none;
+        }
+
+        .skill-list li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .contact {
+            text-align: center;
+            background: radial-gradient(circle at center, var(--bg-secondary) 0%, var(--bg-primary) 70%);
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            color: var(--accent);
+            text-decoration: none;
+            margin: 2rem 0;
+            padding: 1rem 2rem;
+            border: 1px solid var(--accent);
+            border-radius: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-email:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 62, 62, 0.3);
+        }
+
+        .location {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        footer {
+            padding: 3rem 10%;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-tertiary);
+        }
+
+        .modal-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .login-form h3 {
+            margin-bottom: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .login-form p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 62, 62, 0.1);
+        }
+
+        .input-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .admin-tab {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .admin-tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .admin-tab.active {
+            color: var(--accent);
+            background: rgba(255, 62, 62, 0.1);
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .exp-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .exp-item:hover {
+            border-color: var(--accent);
+        }
+
+        .exp-item.editing {
+            border-color: var(--warning);
+            background: rgba(255, 165, 2, 0.05);
+        }
+
+        .exp-info h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .exp-info span {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .exp-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-edit:hover {
+            background: var(--warning);
+            color: var(--bg-primary);
+        }
+
+        .btn-delete {
+            background: rgba(255, 62, 62, 0.1);
+            color: var(--accent);
+        }
+
+        .btn-delete:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-save {
+            background: var(--success);
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-cancel {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            width: 100%;
+            padding: 1rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .btn-cancel:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .alert.error {
+            background: rgba(255, 62, 62, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            display: block;
+        }
+
+        .alert.success {
+            background: rgba(0, 208, 132, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+            display: block;
+        }
+
+        .edit-indicator {
+            display: inline-block;
+            background: var(--warning);
+            color: var(--bg-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .reset-data-btn {
+            background: rgba(255, 62, 62, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+
+        .reset-data-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .loading-text {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .profile-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-header {
+                flex-direction: column;
+            }
+
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <div class="loader">
+        <div class="loader-text">LAW1X</div>
+    </div>
+
+    <button class="admin-trigger" onclick="openAdmin()" title="Admin Access"></button>
+
+    <nav id="navbar">
+        <a href="#" class="logo">
+            <img src="https://cdn.discordapp.com/avatars/1285098941637197899/e3e604da1a955e12fade4ed4be42b02e.webp?size=1024" alt="LAW1X" class="logo-img" id="logoImage">
+            LAW1X
+        </a>
+        <ul class="nav-links">
+            <li><a href="#profile">Profile</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#competencies">Expertise</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-label">Esports Operations Leader</div>
+                <h1>
+                    LAW1X
+                    <span>Structure. Standards. Performance.</span>
+                </h1>
+                <p class="hero-description">
+                    Building competitive organizations from the ground up into well-oiled, high-performing machines. Specializing in operational systems, leadership frameworks, and Tier 1 competitive infrastructure.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#experience" class="btn btn-primary">View Experience</a>
+                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="profile-container">
+                    <div class="profile-ring"></div>
+                    <img src="https://cdn.discordapp.com/avatars/1285098941637197899/e3e604da1a955e12fade4ed4be42b02e.webp?size=1024" alt="Law1x" class="profile-img" id="profileImage">
+                    <div class="status-badge">
+                        <span class="status-dot"></span>
+                        <span id="statusText">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="profile">
+        <div class="section-header">
+            <span class="section-label">Executive Profile</span>
+            <h2 class="section-title">Operational Excellence in Esports</h2>
+            <p class="section-subtitle">Hands-on experience building and scaling organizations into structured, performance-oriented teams through systems, leadership, and strategic alignment.</p>
+        </div>
+        
+        <div class="profile-grid">
+            <div class="profile-card" data-sound="hover">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">Competitive Operations</h3>
+                <p class="card-text">Roster construction, talent evaluation, scrim coordination, and performance expectation management with Tier 1 standards.</p>
+            </div>
+            <div class="profile-card" data-sound="hover">
+                <div class="card-icon">🎯</div>
+                <h3 class="card-title">Organizational Design</h3>
+                <p class="card-text">Staff hierarchy development, department alignment, and systems integration to reduce friction and maximize output.</p>
+            </div>
+            <div class="profile-card" data-sound="hover">
+                <div class="card-icon">📈</div>
+                <h3 class="card-title">Growth Strategy</h3>
+                <p class="card-text">Strategic scaling, culture development, and accountability frameworks that ensure long-term stability and success.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="experience">
+        <div class="section-header">
+            <span class="section-label">Career Timeline</span>
+            <h2 class="section-title">Leadership & Management</h2>
+            <p class="section-subtitle">Progressive experience in executive roles, building infrastructure and leading high-performance teams.</p>
+        </div>
+
+        <div class="timeline" id="experienceTimeline">
+            <div class="loading-text">Loading experience...</div>
+        </div>
+    </section>
+
+    <section id="competencies">
+        <div class="section-header">
+            <span class="section-label">Core Competencies</span>
+            <h2 class="section-title">Areas of Expertise</h2>
+            <p class="section-subtitle">Comprehensive skill set spanning competitive operations, organizational leadership, and brand development.</p>
+        </div>
+
+        <div class="competencies-grid">
+            <div class="competency-category" data-sound="hover">
+                <div class="competency-header">
+                    <div class="competency-icon">⚔️</div>
+                    <h3 class="competency-title">Competitive Operations</h3>
+                </div>
+                <ul class="skill-list">
+                    <li>Roster construction and talent evaluation</li>
+                    <li>Scrim and practice coordination</li>
+                    <li>Performance expectation management</li>
+                    <li>Conflict resolution and internal mediation</li>
+                    <li>Tier 1 competitive standards implementation</li>
+                </ul>
+            </div>
+
+            <div class="competency-category" data-sound="hover">
+                <div class="competency-header">
+                    <div class="competency-icon">👥</div>
+                    <h3 class="competency-title">Organizational Leadership</h3>
+                </div>
+                <ul class="skill-list">
+                    <li>Staff hierarchy development</li>
+                    <li>Department alignment and systems integration</li>
+                    <li>Strategic growth planning and scaling</li>
+                    <li>Culture development and accountability frameworks</li>
+                    <li>Long-term organizational stability</li>
+                </ul>
+            </div>
+
+            <div class="competency-category" data-sound="hover">
+                <div class="competency-header">
+                    <div class="competency-icon">📢</div>
+                    <h3 class="competency-title">Brand & Public Relations</h3>
+                </div>
+                <ul class="skill-list">
+                    <li>Social media growth strategy</li>
+                    <li>Player brand positioning</li>
+                    <li>Announcement and campaign management</li>
+                    <li>Professional public communications</li>
+                    <li>Media-competitive alignment</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="contact-content">
+            <span class="section-label">Get in Touch</span>
+            <h2>Ready to Build Something Great?</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Currently seeking opportunities with Tier 1 organizations focused on competitive excellence and operational innovation.</p>
+            
+            <a href="mailto:rlawr24@gmail.com" class="contact-email" data-sound="hover">
+                <span>rlawr24@gmail.com</span>
+                <span>→</span>
+            </a>
+            
+            <div class="location">
+                <span>📍</span>
+                <span>Queensland, Australia</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 LAW1X. All rights reserved. | Esports Operations Leader</p>
+    </footer>
+
+    <!-- Admin Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span style="color: var(--accent);">🔒</span>
+                    <span id="modalTitle">Admin Access</span>
+                </h3>
+                <button class="modal-close" onclick="closeAdmin()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Login Form -->
+                <div class="login-form" id="loginForm">
+                    <div class="alert" id="loginAlert"></div>
+                    <h3>Authentication Required</h3>
+                    <p>Enter admin credentials to manage content</p>
+                    
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="adminPassword" placeholder="Enter password..." onkeypress="if(event.key==='Enter')authenticate()">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="authenticate()" style="width: 100%; margin-top: 1rem;">Access Dashboard</button>
+                </div>
+
+                <!-- Admin Panel -->
+                <div class="admin-panel" id="adminPanel">
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" onclick="switchTab('experience')">Experience</button>
+                        <button class="admin-tab" onclick="switchTab('profile')">Profile</button>
+                        <button class="admin-tab" onclick="switchTab('settings')">Settings</button>
+                    </div>
+
+                    <!-- Experience Management -->
+                    <div class="admin-section active" id="tab-experience">
+                        <div class="alert" id="expAlert"></div>
+                        
+                        <div id="editModeIndicator" style="display: none;">
+                            <span class="edit-indicator">✏️ EDITING MODE - Modify fields and click Update Experience to save</span>
+                        </div>
+                        
+                        <h4 style="margin-bottom: 1rem;">Current Experience</h4>
+                        <div class="experience-list" id="adminExperienceList">
+                            <!-- Populated by JS -->
+                        </div>
+                        
+                        <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+                        
+                        <h4 style="margin-bottom: 1rem;" id="formTitle">Add New Experience</h4>
+                        <div class="input-group">
+                            <label>Organization</label>
+                            <input type="text" id="newOrg" placeholder="e.g., Tier 1 Esports Org">
+                        </div>
+                        <div class="input-group">
+                            <label>Role/Title</label>
+                            <input type="text" id="newRole" placeholder="e.g., Director of Operations">
+                        </div>
+                        <div class="input-group">
+                            <label>Duration</label>
+                            <input type="text" id="newDuration" placeholder="e.g., 2024 - Present">
+                        </div>
+                        <div class="input-group">
+                            <label>Description</label>
+                            <textarea id="newDesc" placeholder="Describe responsibilities and achievements..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>Tags (comma separated)</label>
+                            <input type="text" id="newTags" placeholder="e.g., Leadership, Strategy, Operations">
+                        </div>
+                        
+                        <input type="hidden" id="editingId" value="">
+                        
+                        <button class="btn btn-save" id="saveBtn" onclick="saveExperience()">Add Experience</button>
+                        <button class="btn btn-cancel" id="cancelEditBtn" onclick="cancelEdit()" style="display: none;">Cancel Edit</button>
+                        
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                            <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1rem;">Danger Zone</p>
+                            <button class="reset-data-btn" onclick="resetAllData()">Reset All Data to Default</button>
+                        </div>
+                    </div>
+
+                    <!-- Profile Management -->
+                    <div class="admin-section" id="tab-profile">
+                        <div class="alert" id="profileAlert"></div>
+                        <div class="input-group">
+                            <label>Current Organization</label>
+                            <input type="text" id="currentOrg" value="Sarrow Esports">
+                        </div>
+                        <div class="input-group">
+                            <label>Status</label>
+                            <select id="workStatus">
+                                <option value="Open to Opportunities">Open to Opportunities</option>
+                                <option value="Employed">Currently Employed</option>
+                                <option value="Not Looking">Not Looking</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Profile Image URL</label>
+                            <input type="text" id="newImageUrl" placeholder="https://...">
+                        </div>
+                        <button class="btn btn-save" onclick="updateProfile()">Update Profile</button>
+                    </div>
+
+                    <!-- Settings -->
+                    <div class="admin-section" id="tab-settings">
+                        <div class="alert" id="settingsAlert"></div>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Change admin access password.</p>
+                        <div class="input-group">
+                            <label>Current Password</label>
+                            <input type="password" id="currentPass">
+                        </div>
+                        <div class="input-group">
+                            <label>New Password</label>
+                            <input type="password" id="newPass">
+                        </div>
+                        <div class="input-group">
+                            <label>Confirm New Password</label>
+                            <input type="password" id="confirmPass">
+                        </div>
+                        <button class="btn btn-save" onclick="changePassword()">Update Password</button>
+                        
+                        <hr style="border: none; border-top: 1px solid var(--border); margin: 2rem 0;">
+                        
+                        <button class="btn btn-delete" onclick="logout()" style="width: 100%;">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration - UPDATE THIS AFTER DEPLOYING TO VERCEL
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000/api' 
+            : 'https://your-vercel-app.vercel.app/api';
+
+        // Admin Configuration
+        const ADMIN_PASSWORD = 'LAW1X2024!';
+        let currentPassword = ADMIN_PASSWORD;
+        let isAuthenticated = false;
+        let experiences = [];
+        let editingId = null;
+
+        // Default Experiences (fallback if API fails)
+        const defaultExperiences = [
+            {
+                id: 1,
+                org: "Sarrow Esports",
+                role: "Co-Owner",
+                date: "Previous",
+                desc: "Promoted to executive after demonstrating operational impact. Directed roster strategy, recruitment evaluation, and performance standards. Managed scrim scheduling, communication channels, and alignment between competitive and media departments.",
+                tags: ["Executive Leadership", "Roster Strategy", "Media Alignment"]
+            },
+            {
+                id: 2,
+                org: "Synex",
+                role: "Founder & Head of Operations",
+                date: "Previous",
+                desc: "Built infrastructure for competitive, media, and promotions divisions. Created recruitment pipelines and onboarding processes. Developed promotional strategies across social platforms and implemented communication systems to reduce friction.",
+                tags: ["Infrastructure", "Recruitment", "Social Growth"]
+            },
+            {
+                id: 3,
+                org: "Fortral",
+                role: "Founder",
+                date: "Previous",
+                desc: "Recruited and managed 30+ staff and competitive members. Established hierarchies, reporting structures, discipline systems, and long-term planning to support growth and operational stability.",
+                tags: ["Team Building", "Systems Design", "Scale Management"]
+            },
+            {
+                id: 4,
+                org: "Beneath Esports",
+                role: "Head of Management",
+                date: "Previous",
+                desc: "Oversaw management operations and coordinated between departments. Contributed to performance standards, improved staff accountability systems, and supported overall organizational growth.",
+                tags: ["Operations", "Accountability", "Growth"]
+            },
+            {
+                id: 5,
+                org: "Chronic",
+                role: "Management",
+                date: "1 Month",
+                desc: "Provided operational and community support, maintained internal communication engagement, and assisted management to ensure team continuity.",
+                tags: ["Community", "Support"]
+            },
+            {
+                id: 6,
+                org: "WTJ",
+                role: "Operations",
+                date: "2 Months",
+                desc: "Assisted with operational tasks behind the scenes, maintained consistent team communication, and supported coordination efforts to enhance workflow efficiency.",
+                tags: ["Operations", "Workflow"]
+            }
+        ];
+
+        // API Helper Functions
+        async function apiRequest(endpoint, method = 'GET', body = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                if (body) options.body = JSON.stringify(body);
+                
+                const response = await fetch(`${API_URL}${endpoint}`, options);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        async function loadExperiences() {
+            try {
+                experiences = await apiRequest('/experiences');
+                if (!experiences || experiences.length === 0) {
+                    experiences = [...defaultExperiences];
+                }
+                renderTimeline();
+            } catch (error) {
+                console.error('Failed to load experiences from API, using defaults:', error);
+                experiences = [...defaultExperiences];
+                renderTimeline();
+            }
+        }
+
+        async function loadProfile() {
+            try {
+                const profile = await apiRequest('/profile');
+                if (profile) {
+                    document.getElementById('currentOrg').value = profile.currentOrg || 'Sarrow Esports';
+                    document.getElementById('workStatus').value = profile.status || 'Open to Opportunities';
+                    if (profile.imageUrl) {
+                        document.getElementById('profileImage').src = profile.imageUrl;
+                        document.getElementById('logoImage').src = profile.imageUrl;
+                    }
+                    document.getElementById('statusText').textContent = profile.status || 'Open to Opportunities';
+                } else {
+                    document.getElementById('statusText').textContent = 'Open to Opportunities';
+                }
+            } catch (error) {
+                console.error('Failed to load profile:', error);
+                document.getElementById('statusText').textContent = 'Open to Opportunities';
+            }
+        }
+
+        // Initialize - LOAD FROM API IMMEDIATELY
+        window.addEventListener('load', () => {
+            // Show loader for 1.8 seconds
+            setTimeout(() => {
+                document.querySelector('.loader').classList.add('hidden');
+            }, 1800);
+            
+            // Load data from API immediately
+            loadExperiences();
+            loadProfile();
+            initScrollEffects();
+            initSoundEffects();
+        });
+
+        // Scroll Effects
+        function initScrollEffects() {
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.profile-card, .competency-category').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Sound Effects
+        let audioContext = null;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playHoverSound() {
+            initAudio();
+            if (audioContext.state === 'suspended') audioContext.resume();
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        function playClickSound() {
+            initAudio();
+            if (audioContext.state === 'suspended') audioContext.resume();
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.15);
+            
+            gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+        }
+
+        function initSoundEffects() {
+            document.querySelectorAll('[data-sound="hover"]').forEach(el => {
+                el.addEventListener('mouseenter', playHoverSound);
+            });
+
+            document.querySelectorAll('.btn, .admin-tab, .btn-small, .timeline-item, .profile-card, .competency-category').forEach(el => {
+                el.addEventListener('click', playClickSound);
+            });
+
+            document.addEventListener('click', initAudio, { once: true });
+        }
+
+        // Admin Functions
+        function openAdmin() {
+            document.getElementById('adminModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (!isAuthenticated) {
+                document.getElementById('adminPassword').focus();
+            }
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminModal').classList.remove('active');
+            document.body.style.overflow = '';
+            if (!isAuthenticated) {
+                document.getElementById('adminPassword').value = '';
+                hideAlert('loginAlert');
+            }
+        }
+
+        function authenticate() {
+            const input = document.getElementById('adminPassword').value;
+            if (input === currentPassword) {
+                isAuthenticated = true;
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminPanel').classList.add('active');
+                document.getElementById('modalTitle').textContent = 'Admin Dashboard';
+                renderAdminExperienceList();
+                showAlert('loginAlert', 'Authentication successful!', 'success');
+            } else {
+                showAlert('loginAlert', 'Invalid password. Please try again.', 'error');
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        function logout() {
+            isAuthenticated = false;
+            document.getElementById('adminPanel').classList.remove('active');
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('modalTitle').textContent = 'Admin Access';
+            document.getElementById('adminPassword').value = '';
+            hideAlert('loginAlert');
+            cancelEdit();
+            closeAdmin();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        // Timeline Rendering
+        function renderTimeline() {
+            const timeline = document.getElementById('experienceTimeline');
+            timeline.innerHTML = '';
+            
+            if (experiences.length === 0) {
+                timeline.innerHTML = '<div class="loading-text">No experience data available</div>';
+                return;
+            }
+            
+            experiences.forEach((exp, index) => {
+                const item = createTimelineElement(exp, index);
+                timeline.appendChild(item);
+            });
+        }
+
+        function createTimelineElement(exp, index) {
+            const div = document.createElement('div');
+            div.className = 'timeline-item';
+            div.dataset.id = exp.id;
+            div.setAttribute('data-sound', 'hover');
+            
+            div.style.animationDelay = `${(index + 1) * 0.1}s`;
+            
+            div.innerHTML = `
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div>
+                            <h3 class="timeline-title">${exp.org}</h3>
+                            <div class="timeline-role">${exp.role}</div>
+                        </div>
+                        <span class="timeline-date">${exp.date}</span>
+                    </div>
+                    <p class="timeline-desc">${exp.desc}</p>
+                    <div class="timeline-tags">
+                        ${exp.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            div.addEventListener('mouseenter', playHoverSound);
+            div.addEventListener('click', playClickSound);
+            
+            return div;
+        }
+
+        // Experience Management
+        function renderAdminExperienceList() {
+            const container = document.getElementById('adminExperienceList');
+            container.innerHTML = experiences.map(exp => `
+                <div class="exp-item ${editingId == exp.id ? 'editing' : ''}" data-exp-id="${exp.id}">
+                    <div class="exp-info">
+                        <h4>${exp.org}</h4>
+                        <span>${exp.role} • ${exp.date}</span>
+                    </div>
+                    <div class="exp-actions">
+                        <button class="btn-small btn-edit" onclick="startEdit(${exp.id})">Edit</button>
+                        <button class="btn-small btn-delete" onclick="deleteExperience(${exp.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function startEdit(id) {
+            const exp = experiences.find(e => e.id == id);
+            if (!exp) return;
+            
+            editingId = id;
+            
+            document.getElementById('newOrg').value = exp.org;
+            document.getElementById('newRole').value = exp.role;
+            document.getElementById('newDuration').value = exp.date;
+            document.getElementById('newDesc').value = exp.desc;
+            document.getElementById('newTags').value = exp.tags.join(', ');
+            document.getElementById('editingId').value = id;
+            
+            document.getElementById('formTitle').textContent = 'Edit Experience';
+            document.getElementById('saveBtn').textContent = 'Update Experience';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+            document.getElementById('editModeIndicator').style.display = 'block';
+            
+            renderAdminExperienceList();
+            document.getElementById('formTitle').scrollIntoView({ behavior: 'smooth' });
+            
+            showAlert('expAlert', 'Edit mode activated. Modify fields and click Update Experience to save.', 'success');
+        }
+
+        function cancelEdit() {
+            editingId = null;
+            
+            document.getElementById('newOrg').value = '';
+            document.getElementById('newRole').value = '';
+            document.getElementById('newDuration').value = '';
+            document.getElementById('newDesc').value = '';
+            document.getElementById('newTags').value = '';
+            document.getElementById('editingId').value = '';
+            
+            document.getElementById('formTitle').textContent = 'Add New Experience';
+            document.getElementById('saveBtn').textContent = 'Add Experience';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+            document.getElementById('editModeIndicator').style.display = 'none';
+            
+            renderAdminExperienceList();
+            hideAlert('expAlert');
+        }
+
+        async function saveExperience() {
+            const org = document.getElementById('newOrg').value;
+            const role = document.getElementById('newRole').value;
+            const duration = document.getElementById('newDuration').value;
+            const desc = document.getElementById('newDesc').value;
+            const tags = document.getElementById('newTags').value.split(',').map(t => t.trim()).filter(t => t);
+
+            if (!org || !role || !desc) {
+                showAlert('expAlert', 'Please fill in all required fields.', 'error');
+                return;
+            }
+
+            try {
+                if (editingId) {
+                    await apiRequest(`/experiences/${editingId}`, 'PUT', {
+                        org, role, date: duration || 'Previous', desc, tags: tags.length ? tags : ['Updated']
+                    });
+                    
+                    await loadExperiences();
+                    showAlert('expAlert', 'Experience updated successfully!', 'success');
+                    cancelEdit();
+                } else {
+                    await apiRequest('/experiences', 'POST', {
+                        org, role, date: duration || 'Previous', desc, tags: tags.length ? tags : ['New']
+                    });
+                    
+                    await loadExperiences();
+                    
+                    document.getElementById('newOrg').value = '';
+                    document.getElementById('newRole').value = '';
+                    document.getElementById('newDuration').value = '';
+                    document.getElementById('newDesc').value = '';
+                    document.getElementById('newTags').value = '';
+                    
+                    showAlert('expAlert', 'Experience added successfully!', 'success');
+                }
+                
+                renderAdminExperienceList();
+            } catch (error) {
+                showAlert('expAlert', 'Failed to save experience. Please try again.', 'error');
+            }
+        }
+
+        async function deleteExperience(id) {
+            if (editingId == id) {
+                showAlert('expAlert', 'Cannot delete while editing. Cancel edit first.', 'error');
+                return;
+            }
+            
+            if (!confirm('Are you sure you want to delete this experience?')) return;
+            
+            try {
+                await apiRequest(`/experiences/${id}`, 'DELETE');
+                await loadExperiences();
+                renderAdminExperienceList();
+                showAlert('expAlert', 'Experience deleted.', 'success');
+            } catch (error) {
+                showAlert('expAlert', 'Failed to delete experience.', 'error');
+            }
+        }
+
+        async function updateProfile() {
+            const org = document.getElementById('currentOrg').value;
+            const status = document.getElementById('workStatus').value;
+            const newImage = document.getElementById('newImageUrl').value;
+            
+            document.getElementById('statusText').textContent = status;
+            
+            const profileData = {
+                currentOrg: org,
+                status: status,
+                imageUrl: newImage || document.getElementById('profileImage').src
+            };
+            
+            if (newImage) {
+                document.getElementById('profileImage').src = newImage;
+                document.getElementById('logoImage').src = newImage;
+            }
+            
+            try {
+                await apiRequest('/profile', 'PUT', profileData);
+                showAlert('profileAlert', 'Profile updated successfully!', 'success');
+            } catch (error) {
+                showAlert('profileAlert', 'Failed to update profile.', 'error');
+            }
+        }
+
+        async function resetAllData() {
+            if (!confirm('WARNING: This will reset ALL data to default values. This cannot be undone. Continue?')) return;
+            
+            try {
+                await apiRequest('/reset', 'POST');
+                await loadExperiences();
+                await loadProfile();
+                renderAdminExperienceList();
+                showAlert('expAlert', 'All data reset to default values.', 'success');
+            } catch (error) {
+                showAlert('expAlert', 'Failed to reset data.', 'error');
+            }
+        }
+
+        function changePassword() {
+            const current = document.getElementById('currentPass').value;
+            const newPass = document.getElementById('newPass').value;
+            const confirm = document.getElementById('confirmPass').value;
+            
+            if (current !== currentPassword) {
+                showAlert('settingsAlert', 'Current password is incorrect.', 'error');
+                return;
+            }
+            
+            if (newPass.length < 6) {
+                showAlert('settingsAlert', 'New password must be at least 6 characters.', 'error');
+                return;
+            }
+            
+            if (newPass !== confirm) {
+                showAlert('settingsAlert', 'New passwords do not match.', 'error');
+                return;
+            }
+            
+            currentPassword = newPass;
+            document.getElementById('currentPass').value = '';
+            document.getElementById('newPass').value = '';
+            document.getElementById('confirmPass').value = '';
+            
+            showAlert('settingsAlert', 'Password updated successfully! New password: ' + newPass, 'success');
+        }
+
+        function showAlert(id, message, type) {
+            const alert = document.getElementById(id);
+            alert.textContent = message;
+            alert.className = `alert ${type}`;
+            setTimeout(() => hideAlert(id), 5000);
+        }
+
+        function hideAlert(id) {
+            document.getElementById(id).className = 'alert';
+        }
+
+        document.getElementById('adminModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeAdmin();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeAdmin();
+        });
+    </script>
+</body>
+</html>
